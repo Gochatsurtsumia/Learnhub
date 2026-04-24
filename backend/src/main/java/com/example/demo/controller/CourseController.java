@@ -21,11 +21,17 @@ public class CourseController {
     public List<Course> getAllCourses(){
         return courseService.getAllCourses();
     }
+    @GetMapping("/{id}")
+    public Course getCourseById(@PathVariable Long id) {
+        return courseService.getCourseById(id);
+    }
+
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
     public Course createCourse(@RequestBody Course course) {
         return courseService.createCourse(course);
     }
+
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")

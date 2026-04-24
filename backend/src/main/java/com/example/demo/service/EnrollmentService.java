@@ -48,10 +48,36 @@ public class EnrollmentService {
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new RuntimeException("Course not found"));
 
+        boolean alreadyEnrolled = enrollmentRepository.findByUserId(userId)
+                .stream()
+                .anyMatch(e -> e.getCourse().getId().equals(courseId));
+
+        if (alreadyEnrolled) {
+            throw new RuntimeException("Already enrolled");
+        }
+
+        if (course.getCapacity() <= 0) {
+            throw new RuntimeException("Course is full");
+        }
+
+        course.setCapacity(course.getCapacity() - 1);
+        courseRepository.save(course);
+
         Enrollment enrollment = new Enrollment();
         enrollment.setUser(user);
         enrollment.setCourse(course);
         return toResponse(enrollmentRepository.save(enrollment));
+    }
+
+    public void unenroll(Long enrollmentId) {
+        Enrollment enrollment = enrollmentRepository.findById(enrollmentId)
+                .orElseThrow(() -> new RuntimeException("Enrollment not found"));
+
+        Course course = enrollment.getCourse();
+        course.setCapacity(course.getCapacity() + 1);
+        courseRepository.save(course);
+
+        enrollmentRepository.deleteById(enrollmentId);
     }
 
     public List<EnrollmentResponse> getEnrollmentsByUser(Long userId) {
@@ -61,7 +87,5 @@ public class EnrollmentService {
                 .toList();
     }
 
-    public void unenroll(Long enrollmentId) {
-        enrollmentRepository.deleteById(enrollmentId);
-    }
+
 }

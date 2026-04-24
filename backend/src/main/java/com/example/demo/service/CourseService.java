@@ -16,6 +16,10 @@ public class CourseService {
     public Course createCourse(Course course){
         return courseRepository.save(course);
     }
+    public Course getCourseById(Long id) {
+        return courseRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Course not found"));
+    }
     public void deleteCourse(Long id){
         courseRepository.deleteById(id);
     }
