@@ -102,65 +102,102 @@ export default function AdminDashboard() {
       )}
 
       <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="border-b border-zinc-800">
-              <th className="text-left text-zinc-500 font-medium px-4 py-3">
-                Title
-              </th>
-              <th className="text-left text-zinc-500 font-medium px-4 py-3">
-                Price
-              </th>
-              <th className="text-left text-zinc-500 font-medium px-4 py-3">
-                Capacity
-              </th>
-              <th className="text-right text-zinc-500 font-medium px-4 py-3">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {loading
-              ? Array.from({ length: 4 }).map((_, i) => (
-                  <tr key={i} className="border-b border-zinc-800">
-                    <td className="px-4 py-3">
-                      <Skeleton className="h-4 w-40" />
-                    </td>
-                    <td className="px-4 py-3">
-                      <Skeleton className="h-4 w-16" />
-                    </td>
-                    <td className="px-4 py-3">
-                      <Skeleton className="h-4 w-12" />
-                    </td>
-                    <td className="px-4 py-3">
-                      <Skeleton className="h-4 w-20 ml-auto" />
-                    </td>
-                  </tr>
-                ))
-              : courses.map((course) => (
-                  <tr
-                    key={course.id}
-                    className="border-b border-zinc-800 last:border-0 hover:bg-zinc-800/50 transition-colors"
-                  >
-                    <td className="px-4 py-3 text-white font-medium">
+        {/* Desktop table */}
+        <div className="hidden md:block overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-zinc-800">
+                <th className="text-left text-zinc-500 font-medium px-4 py-3">
+                  Title
+                </th>
+                <th className="text-left text-zinc-500 font-medium px-4 py-3">
+                  Price
+                </th>
+                <th className="text-left text-zinc-500 font-medium px-4 py-3">
+                  Capacity
+                </th>
+                <th className="text-right text-zinc-500 font-medium px-4 py-3">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {loading
+                ? Array.from({ length: 4 }).map((_, i) => (
+                    <tr key={i} className="border-b border-zinc-800">
+                      <td className="px-4 py-3">
+                        <Skeleton className="h-4 w-40" />
+                      </td>
+                      <td className="px-4 py-3">
+                        <Skeleton className="h-4 w-16" />
+                      </td>
+                      <td className="px-4 py-3">
+                        <Skeleton className="h-4 w-12" />
+                      </td>
+                      <td className="px-4 py-3">
+                        <Skeleton className="h-4 w-20 ml-auto" />
+                      </td>
+                    </tr>
+                  ))
+                : courses.map((course) => (
+                    <tr
+                      key={course.id}
+                      className="border-b border-zinc-800 last:border-0 hover:bg-zinc-800/50 transition-colors"
+                    >
+                      <td className="px-4 py-3 text-white font-medium">
+                        {course.title}
+                      </td>
+                      <td className="px-4 py-3 text-zinc-400">
+                        ${course.price}
+                      </td>
+                      <td className="px-4 py-3 text-zinc-400">
+                        {course.capacity}
+                      </td>
+                      <td className="px-4 py-3 text-right">
+                        <Button
+                          variant="danger"
+                          onClick={() => handleDelete(course.id)}
+                        >
+                          Delete
+                        </Button>
+                      </td>
+                    </tr>
+                  ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Mobile cards */}
+        <div className="md:hidden flex flex-col divide-y divide-zinc-800">
+          {loading
+            ? Array.from({ length: 3 }).map((_, i) => (
+                <div key={i} className="p-4 flex flex-col gap-2">
+                  <Skeleton className="h-4 w-3/4" />
+                  <Skeleton className="h-3 w-1/2" />
+                </div>
+              ))
+            : courses.map((course) => (
+                <div
+                  key={course.id}
+                  className="p-4 flex items-center justify-between gap-3"
+                >
+                  <div>
+                    <p className="text-white font-medium text-sm">
                       {course.title}
-                    </td>
-                    <td className="px-4 py-3 text-zinc-400">${course.price}</td>
-                    <td className="px-4 py-3 text-zinc-400">
-                      {course.capacity}
-                    </td>
-                    <td className="px-4 py-3 text-right">
-                      <Button
-                        variant="danger"
-                        onClick={() => handleDelete(course.id)}
-                      >
-                        Delete
-                      </Button>
-                    </td>
-                  </tr>
-                ))}
-          </tbody>
-        </table>
+                    </p>
+                    <p className="text-zinc-500 text-xs mt-0.5">
+                      ${course.price} · {course.capacity} seats
+                    </p>
+                  </div>
+                  <Button
+                    variant="danger"
+                    onClick={() => handleDelete(course.id)}
+                  >
+                    Delete
+                  </Button>
+                </div>
+              ))}
+        </div>
       </div>
     </div>
   );

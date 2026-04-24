@@ -39,11 +39,7 @@ export default function AuthPage() {
           ? { email: form.email, password: form.password }
           : form;
       const { data } = await api.post(endpoint, payload);
-      const user = {
-        email: form.email,
-        role: data.role,
-        id: data.userId,
-      };
+      const user = { email: form.email, role: data.role, id: data.userId };
       login(data.token, user);
       navigate("/courses");
     } catch (err) {
@@ -54,18 +50,20 @@ export default function AuthPage() {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-950 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-zinc-950 flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-white text-3xl font-bold tracking-tight">
-            LearnHub
+          <h1 className="text-white text-4xl font-bold tracking-tight">
+            Learn<span className="text-violet-500">Hub</span>
           </h1>
           <p className="text-zinc-500 mt-2 text-sm">
-            {mode === "login" ? "Welcome back" : "Create your account"}
+            {mode === "login"
+              ? "Welcome back — sign in to continue"
+              : "Start learning today"}
           </p>
         </div>
 
-        <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-8">
+        <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-8 shadow-2xl shadow-black/50">
           <div className="flex bg-zinc-800 rounded-lg p-1 mb-6">
             {["login", "register"].map((m) => (
               <button
